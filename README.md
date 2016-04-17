@@ -13,3 +13,6 @@ Base image is CoreOS t2.micro
 3. Update variables.tf with your public IP
 4. Copy the private key to this folder.
 5. Run terraform apply
+6. After provision is complete you should be able to see the public IP address of the haproxy
+7. Add this IP to your hosts file. Example 51.48.56.132 openam.example.com
+8. Type http://openam.example.com:8080/openam to go to openam admin console
