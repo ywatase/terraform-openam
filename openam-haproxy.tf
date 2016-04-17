@@ -2,8 +2,8 @@ resource "aws_instance" "openam-haproxy" {
   ami = "ami-2a1fad59"
   instance_type = "t2.micro"
   security_groups = [
-    "${aws_security_group.fleet-street-external.name}",
-    "${aws_security_group.fleet-street-internal.name}"]
+    "${aws_security_group.external.name}",
+    "${aws_security_group.internal.name}"]
   key_name = "${var.key_name}"
 
   connection {

@@ -1,4 +1,4 @@
-resource "aws_security_group" "fleet-street-external" {
+resource "aws_security_group" "external" {
   name_prefix = "external-"
   description = "Restrict to external IP for public access"
 
@@ -17,7 +17,7 @@ resource "aws_security_group" "fleet-street-external" {
   }
 }
 
-resource "aws_security_group" "fleet-street-internal" {
+resource "aws_security_group" "internal" {
   name_prefix = "internal-"
   description = "OpenAM internal traffic + maintenance."
 
