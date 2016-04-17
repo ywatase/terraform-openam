@@ -1,8 +1,11 @@
 # terraform-openam
 
 Terraform scripts to provision openam, opendj and haproxy docker images to AWS
+
 Docker images:
+
 https://hub.docker.com/u/rustemsuniev/
+
 Base image is CoreOS t2.micro
 
 1. Install Terraform - https://www.terraform.io/
