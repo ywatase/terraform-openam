@@ -17,4 +17,6 @@ Base image is CoreOS t2.micro
 7. Add this IP to your hosts file. Example 51.48.56.132 openam.example.com
 8. Type http://openam.example.com/openam to go to openam admin console
 
+To ssh into a box use: `ssh -i "mykey.pem" core@PUBLIC_IP_OF_THE_BOX`
+
 To clear everythig run: `terraform destroy --force`
