@@ -19,4 +19,6 @@ Base image is CoreOS t2.micro
 
 To ssh into a box use: `ssh -i "mykey.pem" core@PUBLIC_IP_OF_THE_BOX`
 
+To get access to a docker image use: `docker exec -it CONTAINER_NAME bash`
+
 To clear everythig run: `terraform destroy --force`
