@@ -30,3 +30,21 @@ variable "haproxy_version" {
 variable "public_ip" {
   default = ""
 }
+
+variable "ssoadm_path" {
+  default = "/opt/openam/ssoadm/openam/bin/ssoadm"
+}
+
+variable "openam_server_type" {
+  default = {
+    master = "master"
+    slave = "slave"
+  }
+}
+
+variable "container-name" {
+  default = {
+    openam = "openam"
+    ssoadm = "ssoadm"
+  }
+}
