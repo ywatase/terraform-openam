@@ -22,9 +22,24 @@ resource "aws_instance" "openam-config" {
       "sudo mkdir -p /etc/systemd/system/docker.service.d",
       "sudo systemctl daemon-reload",
       "sudo docker pull rustemsuniev/openam-config",
-      "sudo docker run --add-host openam.example.com:${aws_instance.openam-server.0.private_ip} -e OPENDJ_SERVER=${aws_instance.opendj-server.private_ip} rustemsuniev/openam-config",
-      "sudo docker run --add-host openam.example.com:${aws_instance.openam-server.1.private_ip} -e OPENDJ_SERVER=${aws_instance.opendj-server.private_ip} rustemsuniev/openam-config"
+      "sudo docker run --add-host openam.example.com:${aws_instance.openam-haproxy.private_ip} --add-host server1.example.com:${aws_instance.openam-server.0.private_ip} -e OPENDJ_SERVER=${aws_instance.opendj-server.0.private_ip} -e SERVER_TYPE=${var.openam_server_type.master} rustemsuniev/openam-config",
+      "sudo docker run --add-host openam.example.com:${aws_instance.openam-haproxy.private_ip} --add-host server2.example.com:${aws_instance.openam-server.1.private_ip} -e OPENDJ_SERVER=${aws_instance.opendj-server.1.private_ip} -e SERVER_TYPE=${var.openam_server_type.slave} rustemsuniev/openam-config"
     ]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo docker stop ${var.container-name.openam}",
+      "sudo docker start ${var.container-name.openam}",
+      "TRY=0;until [ $(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8080/openam/isAlive.jsp\" ) == 200 ] || [ $TRY -gt 15 ]; do echo \"Waiting for openam server\";sleep 5;let \"TRY++\";done",
+      "docker exec -it ${var.container-name.ssoadm} sh /opt/ssoadm/ssoadm-install.sh"
+    ]
+    connection {
+      user = "core"
+      type = "ssh"
+      host = "${aws_instance.openam-server.0.public_ip}"
+      private_key = "${var.key_path}"
+    }
   }
 
   root_block_device {

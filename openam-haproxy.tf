@@ -34,7 +34,7 @@ resource "aws_instance" "openam-haproxy" {
       "sudo mkdir -p /etc/systemd/system/docker.service.d",
       "sudo systemctl daemon-reload",
       "sudo docker pull haproxy:${var.haproxy_version}",
-      "sudo docker run -d --name my-running-haproxy -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro -p 80:80 -p 81:81 haproxy:${var.haproxy_version}"
+      "sudo docker run -h openam.example.com -d --name my-running-haproxy -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro -p 80:80 -p 81:81 haproxy:${var.haproxy_version}"
     ]
   }
 

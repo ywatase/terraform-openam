@@ -4,7 +4,7 @@ resource "aws_instance" "opendj-server" {
   security_groups = [
     "${aws_security_group.internal.name}"]
   key_name = "${var.key_name}"
-  #count = 1
+  count = 2
 
   connection {
     user = "core"

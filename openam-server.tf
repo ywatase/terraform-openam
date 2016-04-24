@@ -11,15 +11,18 @@ resource "aws_instance" "openam-server" {
   }
 
   tags {
-    Name = "openam-server"
+    Name = "openam-server-${concat("server",count.index+1)}"
   }
 
   provisioner "remote-exec" {
     inline = [
       "sudo mkdir -p /etc/systemd/system/docker.service.d",
+      "sudo mkdir -p /root/openam",
       "sudo systemctl daemon-reload",
       "sudo docker pull rustemsuniev/openam",
-      "sudo docker run -d -p 8080:8080 rustemsuniev/openam"
+      "sudo docker run --name=${var.container-name.openam} -h ${concat("server",count.index+1)}.example.com -d -p 8080:8080 -v /root/openam:/root/openam rustemsuniev/openam",
+      "sudo docker pull rustemsuniev/ssoadm",
+      "sudo docker run --name=${var.container-name.ssoadm} --add-host ${concat("server",count.index+1)}.example.com:${self.private_ip} -d -v /root/openam:/root/openam rustemsuniev/ssoadm"
     ]
   }
 
