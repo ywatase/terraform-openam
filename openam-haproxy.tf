@@ -1,13 +1,16 @@
 resource "aws_instance" "openam-haproxy" {
-  ami = "ami-2a1fad59"
-  instance_type = "t2.micro"
+  ami           = "${lookup(var.aws_amis, var.aws_region)}"
+  instance_type = "${var.instance_type}"
+
   security_groups = [
     "${aws_security_group.external.name}",
-    "${aws_security_group.internal.name}"]
+    "${aws_security_group.internal.name}",
+  ]
+
   key_name = "${var.key_name}"
 
   connection {
-    user = "core"
+    user        = "core"
     private_key = "${var.key_path}"
   }
 
@@ -18,12 +21,12 @@ resource "aws_instance" "openam-haproxy" {
   provisioner "remote-exec" {
     inline = [
       "sudo mkdir /etc/haproxy/",
-      "sudo chown core:core /etc/haproxy"
+      "sudo chown core:core /etc/haproxy",
     ]
   }
 
   provisioner "file" {
-    source = "${path.module}/files/haproxy.cfg"
+    source      = "${path.module}/files/haproxy.cfg"
     destination = "/etc/haproxy/haproxy.cfg"
   }
 
@@ -34,13 +37,13 @@ resource "aws_instance" "openam-haproxy" {
       "sudo mkdir -p /etc/systemd/system/docker.service.d",
       "sudo systemctl daemon-reload",
       "sudo docker pull haproxy:${var.haproxy_version}",
-      "sudo docker run -h openam.example.com -d --name my-running-haproxy -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro -p 80:80 -p 81:81 haproxy:${var.haproxy_version}"
+      "sudo docker run -h openam.example.com -d --name my-running-haproxy -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro -p 80:80 -p 81:81 haproxy:${var.haproxy_version}",
     ]
   }
 
   root_block_device {
-    volume_type = "gp2"
-    volume_size = "8"
+    volume_type           = "gp2"
+    volume_size           = "8"
     delete_on_termination = true
   }
 }

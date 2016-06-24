@@ -9,18 +9,24 @@ variable "key_path" {
 variable "access_key" {
   default = ""
 }
+
 variable "secret_key" {
   default = ""
 }
 
 variable "aws_region" {
-  default = "eu-west-1"
+  default = "us-east-1"
 }
 
 variable "aws_amis" {
   default = {
     eu-west-1 = "ami-2a1fad59"
+    us-east-1 = "ami-7f3a0b15"
   }
+}
+
+variable "instance_type" {
+  default = "t2.micro"
 }
 
 variable "haproxy_version" {
@@ -38,7 +44,7 @@ variable "ssoadm_path" {
 variable "openam_server_type" {
   default = {
     master = "master"
-    slave = "slave"
+    slave  = "slave"
   }
 }
 

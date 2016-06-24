@@ -1,12 +1,12 @@
 resource "aws_instance" "openam-server" {
-  ami = "ami-2a1fad59"
-  instance_type = "t2.micro"
+  ami             = "${lookup(var.aws_amis, var.aws_region)}"
+  instance_type   = "${var.instance_type}"
   security_groups = ["${aws_security_group.internal.name}"]
-  key_name = "${var.key_name}"
-  count = 2
+  key_name        = "${var.key_name}"
+  count           = 2
 
   connection {
-    user = "core"
+    user        = "core"
     private_key = "${var.key_path}"
   }
 
@@ -22,13 +22,13 @@ resource "aws_instance" "openam-server" {
       "sudo docker pull rustemsuniev/openam",
       "sudo docker run --name=${var.container-name.openam} -h ${concat("server",count.index+1)}.example.com -d -p 8080:8080 -v /root/openam:/root/openam rustemsuniev/openam",
       "sudo docker pull rustemsuniev/ssoadm",
-      "sudo docker run --name=${var.container-name.ssoadm} --add-host ${concat("server",count.index+1)}.example.com:${self.private_ip} -d -v /root/openam:/root/openam rustemsuniev/ssoadm"
+      "sudo docker run --name=${var.container-name.ssoadm} --add-host ${concat("server",count.index+1)}.example.com:${self.private_ip} -d -v /root/openam:/root/openam rustemsuniev/ssoadm",
     ]
   }
 
   root_block_device {
-    volume_type = "gp2"
-    volume_size = "8"
+    volume_type           = "gp2"
+    volume_size           = "8"
     delete_on_termination = true
   }
 }
