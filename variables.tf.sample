@@ -37,6 +37,10 @@ variable "public_ip" {
   default = ""
 }
 
+variable "maintenance_ip" {
+  default = ""
+}
+
 variable "ssoadm_path" {
   default = "/opt/openam/ssoadm/openam/bin/ssoadm"
 }
